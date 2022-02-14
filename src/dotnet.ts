@@ -18,6 +18,7 @@ export type FormatFunction = (options: FormatOptions) => Promise<boolean>;
 export interface FormatOptions {
   dryRun: boolean;
   onlyChangedFiles: boolean;
+  action: string;
 }
 
 function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
@@ -37,7 +38,11 @@ function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
 async function formatVersion3(options: FormatOptions): Promise<boolean> {
   const execOptions: ExecOptions = { ignoreReturnCode: true };
 
-  const dotnetFormatOptions = ["format", "--check"];
+  const dotnetFormatOptions = ["format"];
+
+  if (options.action == "check"){
+    dotnetFormatOptions.push("--check");
+  }
 
   if (options.dryRun) {
     dotnetFormatOptions.push("--dry-run");
